@@ -1,8 +1,8 @@
 resource "azurerm_virtual_machine" "front" {
   name                  = "${terraform.workspace}-front-vm"
-  location              = "${var.resource_group.location}"
-  resource_group_name   = "${var.resource_group.name}"
-  network_interface_ids = ["${azurerm_network_interface.front.id}"]
+  location              = var.resource_group.location
+  resource_group_name   = var.resource_group.name
+  network_interface_ids = [azurerm_network_interface.front.id]
   vm_size               = "Standard_B1s"
 
   storage_image_reference {
@@ -19,22 +19,22 @@ resource "azurerm_virtual_machine" "front" {
   }
   os_profile {
     computer_name  = "${terraform.workspace}-front-vm"
-    admin_username = "${var.admin_user}"
+    admin_username = var.admin_user
   }
   os_profile_linux_config {
     disable_password_authentication = true
     ssh_keys {
 	path = "/home/${var.admin_user}/.ssh/authorized_keys"
-	key_data = "${file("/home/${var.admin_user}/.ssh/id_rsa.pub")}"
+	key_data = file(pathexpand("~/.ssh/id_rsa.pub"))
 	}
   }
   tags = {
-    environment = "staging"
+    environment = terraform.workspace
   }
 	connection {
 		type = "ssh"
-		user = "${var.admin_user}"
-		private_key = file("/home/${var.admin_user}/.ssh/id_rsa")
+		user = var.admin_user
+		private_key = file(pathexpand("~/.ssh/id_rsa"))
 		host = "${azurerm_public_ip.front.fqdn}"
   }
   provisioner "remote-exec" {

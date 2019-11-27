@@ -1,7 +1,7 @@
 resource "azurerm_network_security_group" "front" {
     name                = "${terraform.workspace}-front-door"
-    location            = "${var.resource_group.location}"
-    resource_group_name = "${var.resource_group.name}"
+    location            = var.resource_group.location
+    resource_group_name = var.resource_group.name
     
     security_rule {
         name                       = "SSH"
@@ -28,8 +28,8 @@ resource "azurerm_network_security_group" "front" {
 }
 resource "azurerm_network_security_group" "back" {
     name                = "${terraform.workspace}-back-door"
-    location            = "${var.resource_group.location}"
-    resource_group_name = "${var.resource_group.name}"
+    location            = var.resource_group.location
+    resource_group_name = var.resource_group.name
 
     security_rule {
         name                       = "SSH1"
@@ -69,8 +69,8 @@ resource "azurerm_network_security_group" "back" {
 }
 resource "azurerm_network_security_group" "data" {
     name                = "${terraform.workspace}-data-door"
-    location            = "${var.resource_group.location}"
-    resource_group_name = "${var.resource_group.name}"
+    location            = var.resource_group.location
+    resource_group_name = var.resource_group.name
 
     security_rule {
         name                       = "SSH1"
@@ -98,8 +98,8 @@ resource "azurerm_network_security_group" "data" {
 } 
 resource "azurerm_network_security_group" "manage" {
     name                = "${terraform.workspace}-manage-door"
-    location            = "${var.resource_group.location}"
-    resource_group_name = "${var.resource_group.name}"
+    location            = var.resource_group.location
+    resource_group_name = var.resource_group.name
 
     security_rule {
         name                       = "SSH1"
